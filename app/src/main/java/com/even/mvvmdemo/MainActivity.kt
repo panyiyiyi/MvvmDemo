@@ -13,8 +13,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
         mViewModel.req()
 
         btn.setOnClickListener {
-            val intent = Intent(this, ThreeActivity::class.java)
+            val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
         }
     }
+
+    override fun getTitleBarId(): Int = R.layout.item_title_bar
 }

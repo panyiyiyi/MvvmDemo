@@ -16,4 +16,6 @@ class ThreeActivity : BaseActivity<BaseViewModel>() {
     override fun initView() {
         tvText.text = "hhhhhhhhh"
     }
+
+    override fun getTitleBarId(): Int = R.layout.item_title_bar
 }

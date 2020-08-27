@@ -27,4 +27,7 @@ class SecondActivity : BaseActivity<SecondViewModel>() {
     override fun initData() {
         super.initData()
     }
+
+    override fun useDefaultTitleBar(): Boolean = false
+    override fun getTitleBarId(): Int = R.layout.item_title_bar
 }
