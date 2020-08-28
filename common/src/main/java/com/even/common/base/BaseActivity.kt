@@ -18,6 +18,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import com.even.common.impl.OnPermissionCallBack
 import com.even.common.impl.OnPermissionCallBacks
+import com.even.common.utils.ActivityManagerUtils
 import com.even.common.vm.BaseViewModel
 import java.lang.reflect.ParameterizedType
 
@@ -84,12 +85,9 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
             }
             setContentView(view)
         }
+        ActivityManagerUtils.addActivity(this)
         initView()
         initData()
-    }
-
-    fun startActivity() {
-
     }
 
 
@@ -221,6 +219,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         permissionCallBacks = null
+        ActivityManagerUtils.closeActivity(this)
     }
 
 

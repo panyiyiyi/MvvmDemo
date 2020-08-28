@@ -16,7 +16,8 @@ data class RemindDialogBean(
     val msgGravity: Int?,
     val msgColor: Int?,
     val btnLeftColor: Int?,
-    val btnRightColor: Int?
+    val btnRightColor: Int?,
+    val canCancelOutSide: Boolean
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -27,9 +28,24 @@ data class RemindDialogBean(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.readValue(Int::class.java.classLoader) as? Int
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readByte() != 0.toByte()
     ) {
     }
+
+    //点击外部区域不能取消
+    constructor(title: String, msg: String, btnLeft: String, btnRight: String) : this(
+        title,
+        msg,
+        btnLeft,
+        btnRight,
+        null,
+        null,
+        null,
+        null,
+        null,
+        false
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(title)
@@ -41,6 +57,7 @@ data class RemindDialogBean(
         parcel.writeValue(msgColor)
         parcel.writeValue(btnLeftColor)
         parcel.writeValue(btnRightColor)
+        parcel.writeByte(if (canCancelOutSide) 1 else 0)
     }
 
     override fun describeContents(): Int {

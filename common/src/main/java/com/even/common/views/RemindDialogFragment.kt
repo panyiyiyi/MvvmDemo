@@ -9,7 +9,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import com.even.common.BR
 import com.even.common.R
-import com.even.common.base.BaseDialogFragment
 import com.even.common.bean.RemindDialogBean
 import com.even.common.constant.CommonBundleKey
 
@@ -29,12 +28,15 @@ class RemindDialogFragment : DialogFragment() {
         mBindView.setVariable(BR.remindBean, remindBean)
         val builder = AlertDialog.Builder(activity)
         builder.setView(mBindView.root)
-        return builder.create()
+        val create = builder.create()
+        create.setCanceledOnTouchOutside(remindBean.canCancelOutSide)
+
+        return create
     }
 
     companion object {
-        fun newInstance(remindBean: RemindDialogBean): BaseDialogFragment {
-            val fragment = BaseDialogFragment()
+        fun newInstance(remindBean: RemindDialogBean): RemindDialogFragment {
+            val fragment = RemindDialogFragment()
             val bundle = Bundle()
             bundle.putParcelable(CommonBundleKey.KEY_BEAN, remindBean)
             fragment.arguments = bundle

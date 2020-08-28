@@ -21,20 +21,20 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="@{remindBean.titleGravity?Gravity.CENTER:remindBean.titleGravity}"
+            android:gravity="@{remindBean.titleGravity==null?Gravity.CENTER:remindBean.titleGravity}"
             android:text="@{remindBean.title}"
             android:textSize="@dimen/textSizeS"
-            android:visibility="@{remindBean.title? View.GONE:View.VISIBLE }" />
+            android:visibility="@{remindBean.title==null? View.GONE:View.VISIBLE }" />
 
         <TextView
             android:id="@+id/tvMsg"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="@{remindBean.msgGravity?Gravity.CENTER:remindBean.msgGravity}"
+            android:gravity="@{remindBean.msgGravity==null?Gravity.CENTER:remindBean.msgGravity}"
             android:text="@{remindBean.msg}"
-            android:textColor="@{remindBean.msgColor?Color.GRAY:remindBean.msgColor}"
+            android:textColor="@{remindBean.msgColor==null?Color.GRAY:remindBean.msgColor}"
             android:textSize="@dimen/textSizeS" />
 
         <LinearLayout
@@ -48,7 +48,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@{remindBean.btnLeft}"
-                android:textColor="@{remindBean.btnLeftColor?Color.GRAY:remindBean.btnLeftColor}"
+                android:textColor="@{remindBean.btnLeftColor==null?Color.GRAY:remindBean.btnLeftColor}"
                 android:textSize="@dimen/textSizeS" />
 
             <View
@@ -62,7 +62,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@{remindBean.btnRight}"
-                android:textColor="@{remindBean.btnRightColor?Color.GRAY:remindBean.btnRightColor}"
+                android:textColor="@{remindBean.btnRightColor==null?Color.GRAY:remindBean.btnRightColor}"
                 android:textSize="@dimen/textSizeS" />
 
         </LinearLayout>

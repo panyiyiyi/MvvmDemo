@@ -18,18 +18,19 @@ class MainActivity : BaseActivity<MainViewModel>() {
         btn.setOnClickListener {
             val newInstance = RemindDialogFragment.newInstance(
                 RemindDialogBean(
-                    "hh",
-                    "hhh",
+                    "sdfasdfa",
+                    "hhddhh",
                     "ada",
                     "adfasd",
-                    Gravity.LEFT,
+                    Gravity.START,
                     Gravity.CENTER,
                     Color.BLUE,
+                    Color.RED,
                     Color.BLUE,
-                    Color.BLUE
+                    false
                 )
             )
-            supportFragmentManager.beginTransaction().add(newInstance, "BA")
+            supportFragmentManager.beginTransaction().add(newInstance, "BaA")
                 .commitAllowingStateLoss()
 
 
