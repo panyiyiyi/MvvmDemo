@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.view.Gravity" />
+
+        <import type="android.graphics.Color" />
+
+        <variable
+            name="remindBean"
+            type="com.even.common.bean.RemindDialogBean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="@{remindBean.titleGravity?Gravity.CENTER:remindBean.titleGravity}"
+            android:text="@{remindBean.title}"
+            android:textSize="@dimen/textSizeS"
+            android:visibility="@{remindBean.title? View.GONE:View.VISIBLE }" />
+
+        <TextView
+            android:id="@+id/tvMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="@{remindBean.msgGravity?Gravity.CENTER:remindBean.msgGravity}"
+            android:text="@{remindBean.msg}"
+            android:textColor="@{remindBean.msgColor?Color.GRAY:remindBean.msgColor}"
+            android:textSize="@dimen/textSizeS" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{remindBean.btnLeft}"
+                android:textColor="@{remindBean.btnLeftColor?Color.GRAY:remindBean.btnLeftColor}"
+                android:textSize="@dimen/textSizeS" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{remindBean.btnRight}"
+                android:textColor="@{remindBean.btnRightColor?Color.GRAY:remindBean.btnRightColor}"
+                android:textSize="@dimen/textSizeS" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

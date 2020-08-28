@@ -1,5 +1,6 @@
 package com.even.common.base
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
@@ -11,8 +12,22 @@ import androidx.fragment.app.DialogFragment
 class BaseDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-
-        return super.onCreateDialog(savedInstanceState)
+        val builder = AlertDialog.Builder(activity)
+        builder.setTitle("hhh")
+        builder.setMessage("asdfadsf")
+        val string = arguments?.getString("key")
+        builder.setMessage(string)
+        return builder.create()
     }
+
+    companion object {
+        fun newInstance(): BaseDialogFragment {
+            val fragment = BaseDialogFragment()
+            val bundle = Bundle()
+            bundle.putString("key", "6666")
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
 }

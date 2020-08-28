@@ -1,7 +1,10 @@
 package com.even.mvvmdemo
 
-import android.content.Intent
+import android.graphics.Color
+import android.view.Gravity
 import com.even.common.base.BaseActivity
+import com.even.common.bean.RemindDialogBean
+import com.even.common.views.RemindDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<MainViewModel>() {
@@ -13,8 +16,25 @@ class MainActivity : BaseActivity<MainViewModel>() {
         mViewModel.req()
 
         btn.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
-            startActivity(intent)
+            val newInstance = RemindDialogFragment.newInstance(
+                RemindDialogBean(
+                    "hh",
+                    "hhh",
+                    "ada",
+                    "adfasd",
+                    Gravity.LEFT,
+                    Gravity.CENTER,
+                    Color.BLUE,
+                    Color.BLUE,
+                    Color.BLUE
+                )
+            )
+            supportFragmentManager.beginTransaction().add(newInstance, "BA")
+                .commitAllowingStateLoss()
+
+
+//            val intent = Intent(this, SecondActivity::class.java)
+//            startActivity(intent)
         }
     }
 
