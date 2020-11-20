@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MVVMDemo</string>
+    <string name="common_connect_error">网络连接异常，请检查您的网络，稍后重试！</string>
+    <string name="common_null_pointer_error">空指针异常</string>
+    <string name="common_ssl_error">证书校验失败</string>
+    <string name="common_parse_error">解析错误</string>
+    <string name="common_unknown_error">未知错误</string>
+    <string name="common_unknown_host_error">服务器异常，请稍后重试！</string>
 </resources>

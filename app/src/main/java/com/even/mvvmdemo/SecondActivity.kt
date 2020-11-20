@@ -1,5 +1,7 @@
 package com.even.mvvmdemo
 
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.even.common.base.BaseActivity
@@ -9,12 +11,9 @@ import kotlinx.android.synthetic.main.activity_second.*
  * Create by Even on 2020/8/27
  *
  */
-class SecondActivity : BaseActivity<SecondViewModel>() {
-    override fun getLayoutId(): Int = R.layout.activity_second
+class SecondActivity : BaseActivity<SecondViewModel>(R.layout.activity_second) {
+    override fun initView(view: ViewGroup) {
 
-    override fun getVariable(): Int? = null
-
-    override fun initView() {
         mViewModel.req()
         mViewModel.arcLiveData.observe(this, Observer {
             it.datas?.let {
@@ -24,10 +23,6 @@ class SecondActivity : BaseActivity<SecondViewModel>() {
         })
     }
 
-    override fun initData() {
-        super.initData()
-    }
-
     override fun useDefaultTitleBar(): Boolean = false
-    override fun getTitleBarId(): Int = R.layout.item_title_bar
+
 }

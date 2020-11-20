@@ -1,44 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="wrap_content"
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="baseViewModel"
+            type="com.even.common.vm.BaseViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle" />
+        android:background="@{baseViewModel.titleBar.backResource}">
 
-    <TextView
-        android:id="@+id/tvRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="hhh"
-        android:textSize="@dimen/textSizeS"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle" />
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{baseViewModel.titleBackListener}"
+            android:padding="15dp"
+            android:src="@mipmap/common_ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:padding="10dp"
-        android:text="dd"
-        android:textSize="@dimen/textSizeM"
-        app:layout_constraintEnd_toStartOf="@id/tvRight"
-        app:layout_constraintStart_toEndOf="@id/ivBack"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvRight"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="15dp"
+            android:gravity="center"
+            android:onClick="@{baseViewModel.titleBarListener}"
+            android:text="@{baseViewModel.titleBar.rightText}"
+            android:textSize="@dimen/textSizeS"
+            android:visibility="@{baseViewModel.titleBar.showRightImage?View.GONE:View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="右边文字" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="15dp"
+            android:onClick="@{baseViewModel.titleBarListener}"
+            android:src="@{baseViewModel.titleBar.rightImage}"
+            android:visibility="@{baseViewModel.titleBar.showRightImage?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@mipmap/common_ic_back" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:onClick="@{baseViewModel.titleBarListener}"
+            android:text="@{baseViewModel.titleBar.title}"
+            android:textSize="@dimen/textSizeM"
+            android:visibility="@{baseViewModel.titleBar.title==null ? View.GONE:View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="这是标题" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

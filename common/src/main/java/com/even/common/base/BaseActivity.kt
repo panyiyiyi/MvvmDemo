@@ -14,8 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.even.common.BR
+import com.even.common.R
+import com.even.common.bean.TitleBarBean
+import com.even.common.databinding.CommonTitleBarBinding
 import com.even.common.impl.OnPermissionCallBack
 import com.even.common.impl.OnPermissionCallBacks
 import com.even.common.utils.ActivityManagerUtils
@@ -26,70 +30,60 @@ import java.lang.reflect.ParameterizedType
  * Create by Even on 2020/8/25
  * Activity 基础类
  */
-abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
+abstract class BaseActivity<VM : BaseViewModel>(@LayoutRes private val layoutId: Int) :
+    AppCompatActivity() {
 
     private var permissionCallBacks: OnPermissionCallBacks? = null
-
     lateinit var mViewModel: VM
-    lateinit var activity: BaseActivity<VM>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val clazz =
             (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<VM>
         mViewModel = ViewModelProvider(this).get(clazz)
-        if (getVariable() != null) {
-            val dataBinding =
-                DataBindingUtil.setContentView<ViewDataBinding>(this, getLayoutId())
-            dataBinding.lifecycleOwner = this
-            dataBinding.setVariable(getVariable()!!, mViewModel)
-            setContentView(dataBinding.root)
-        } else {
-            setContentView(getLayoutId())
-        }
-        if (!useDefaultTitleBar() && getVariable() == null) {
-            setContentView(getLayoutId())
-        } else {
-            var view: View? = null
-            if (getVariable() != null) {
-                val dataBinding =
-                    DataBindingUtil.setContentView<ViewDataBinding>(this, getLayoutId())
-                dataBinding.lifecycleOwner = this
-                dataBinding.setVariable(getVariable()!!, mViewModel)
-                setContentView(dataBinding.root)
-                view = dataBinding.root
-            }
-            if (useDefaultTitleBar()) {
-                val linearLayout = LinearLayout(this)
-                val titleBar = layoutInflater.inflate(getTitleBarId(), null)
-                linearLayout.addView(
-                    titleBar, LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
+        val view = if (useDefaultTitleBar()) {
+            //使用默认标题
+            val linearLayout = LinearLayout(this)
+            val titleBar = layoutInflater.inflate(titleBarId, null)
+            linearLayout.addView(
+                titleBar, LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-                linearLayout.orientation = LinearLayout.VERTICAL
-                if (view == null) {
-                    linearLayout.addView(
-                        layoutInflater.inflate(getLayoutId(), null), LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                        )
-                    )
-                } else {
-                    val parent = view.parent as ViewGroup
-                    parent.removeView(view)
-                    linearLayout.addView(view)
-                }
-                view = linearLayout
-            }
-            setContentView(view)
+            )
+            linearLayout.orientation = LinearLayout.VERTICAL
+            linearLayout.addView(
+                layoutInflater.inflate(layoutId, null), LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+            )
+            val titleBind = DataBindingUtil.bind<CommonTitleBarBinding>(titleBar)
+            titleBind?.lifecycleOwner = this
+            titleBind?.setVariable(BR.baseViewModel, mViewModel)
+
+            linearLayout
+        } else {
+            //不使用默认标题
+            layoutInflater.inflate(layoutId, null)
         }
+        setContentView(view)
         ActivityManagerUtils.addActivity(this)
-        initView()
+        initView(view as ViewGroup)
         initData()
     }
 
+    //回调
+    private fun observeCallBack() {
+        mViewModel.titleBackListener.set(View.OnClickListener { finish() })
+        mViewModel.mIsShowLoading.observe(this, Observer {
+
+        })
+    }
+
+    fun setTitleBar(titleBarBean: TitleBarBean) {
+        mViewModel.titleBar.postValue(titleBarBean)
+    }
 
     /**
      * 单个权限申请
@@ -97,7 +91,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
     @Synchronized
     open fun requestPermission(permission: String, callBack: OnPermissionCallBack) {
         requestPermissions(mutableListOf(permission), object : OnPermissionCallBacks {
-            override fun onFailResult(permissionDenieds: Array<String>) {
+            override fun onFailResult(denies: Array<String>) {
                 callBack.onResult(false)
             }
 
@@ -142,9 +136,9 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
      */
     open fun requestOverlays() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(activity)) {
+            if (!Settings.canDrawOverlays(this)) {
                 val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-                intent.data = Uri.fromParts("package", activity.packageName, null)
+                intent.data = Uri.fromParts("package", this.packageName, null)
                 startActivityForResult(intent, REQ_OVERLAY_PERMISSION)
             } else {
                 resultOverlaysPermission(true)
@@ -168,7 +162,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
         grantResults: IntArray
     ) {
         if (REQ_PERMISSION_RECODE == requestCode) {
-            var deniedLists = mutableListOf<String>()
+            val deniedLists = mutableListOf<String>()
 
             for (index in grantResults.indices) {
                 if (PackageManager.PERMISSION_DENIED == grantResults[index]) {
@@ -187,7 +181,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_OVERLAY_PERMISSION) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (Settings.canDrawOverlays(activity)) {
+                if (Settings.canDrawOverlays(this)) {
                     resultOverlaysPermission(true)
                 } else {
                     resultOverlaysPermission(false)
@@ -198,21 +192,22 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
         }
     }
 
-    //布局Id
-    @LayoutRes
-    abstract fun getLayoutId(): Int
-
     //标题ID
-    abstract fun getTitleBarId(): Int
-
-    //绑定参数
-    abstract fun getVariable(): Int?
+    open var titleBarId: Int = R.layout.common_title_bar
 
     //初始化布局相关
-    abstract fun initView()
+    abstract fun initView(view: ViewGroup)
 
     //获取数据
     open fun initData() {}
+
+    open fun showLoading(){
+
+    }
+
+    open fun showError(){
+
+    }
 
     open fun useDefaultTitleBar(): Boolean = true
 

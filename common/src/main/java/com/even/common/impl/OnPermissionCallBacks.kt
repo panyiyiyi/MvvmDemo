@@ -9,7 +9,7 @@ interface OnPermissionCallBacks {
     /**
      * 拒接接口的回调
      */
-    fun onFailResult(permissionDenies: Array<String>)
+    fun onFailResult(denies: Array<String>)
 
     /**
      *  通过所有权限的回调
