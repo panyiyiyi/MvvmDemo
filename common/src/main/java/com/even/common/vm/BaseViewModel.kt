@@ -10,6 +10,7 @@ import com.even.common.bean.ErrorBean
 import com.even.common.bean.TitleBarBean
 import com.even.common.request.RetrofitUtil
 import com.even.common.request.exception.ApiException
+import com.even.common.utils.LogUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,9 +24,7 @@ open class BaseViewModel : ViewModel() {
     val titleBackListener = ObservableField<View.OnClickListener>()//返回键点击监听，用来重写返回方法
     val titleBarListener = ObservableField<View.OnClickListener>() //标题栏点击监听
 
-
     val mRetrofitUtil by lazy { RetrofitUtil.getInstance() }
-
 
     /**
      * 请求服务器接口
@@ -34,25 +33,26 @@ open class BaseViewModel : ViewModel() {
         block: suspend CoroutineScope.() -> BaseResponseBean<T>,
         liveData: MutableLiveData<T>,
         blockSuccess: (data: T?) -> Unit? = { },
-        blockError: (code: Int, msg: String) -> Unit?,
+        blockError: (code: Int, msg: String) -> Unit? = { _, _ -> },
         isShowLoading: Boolean = false,
         isShowError: Boolean = true
     ) {
-        if (isShowLoading) mIsShowLoading.value = true
+        LogUtils.e("执行时间：${System.currentTimeMillis()}")
+        if (isShowLoading) mIsShowLoading.postValue(true)
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) { block() }
                 if (result.errorCode == 0) {
-                    liveData.value = result.data
+                    liveData.postValue(result.data)
                 } else {
                     //返回错误
-                    mErrorData.value = ErrorBean(result.errorCode, result.errorMsg, isShowError)
+                    mErrorData.postValue(ErrorBean(result.errorCode, result.errorMsg, isShowError))
                 }
             } catch (e: Exception) {
                 val exception = ApiException.handleException(e)
-                mErrorData.value = ErrorBean(exception.mCode, exception.message, isShowError)
+                mErrorData.postValue(ErrorBean(exception.mCode, exception.message, isShowError))
             } finally {
-                mIsShowLoading.value = false
+                mIsShowLoading.postValue(false)
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.even.common.request
 
-import com.even.common.interceptor.HeaderInterceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -14,12 +13,12 @@ import java.io.File
  * retrofit配置
  */
 class RetrofitUtil {
-    private val mBuilder =
+    private val mBuilder by lazy {
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
+    }
     private lateinit var mRetrofit: Retrofit
     private lateinit var mOkHttpClient: OkHttpClient
-    private var mHeaderInterceptor: HeaderInterceptor? = null
 
     fun <T> create(clazz: Class<T>): T {
         return mRetrofit.create(clazz)
@@ -54,15 +53,6 @@ class RetrofitUtil {
 
     fun buildRetrofit() {
         mRetrofit = mBuilder.build()
-    }
-
-    //添加请求头
-    fun addHeader(key: String, value: String) {
-        if (null == mHeaderInterceptor) {
-            mHeaderInterceptor = HeaderInterceptor()
-        }
-        mHeaderInterceptor!!.mHeaderMaps[key] = value
-        mOkHttpClient = mOkHttpClient.newBuilder().addInterceptor(mHeaderInterceptor!!).build()
     }
 
     fun setBaseUrl(baseUrl: String): RetrofitUtil {

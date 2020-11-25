@@ -8,9 +8,10 @@ import com.even.common.bean.RemindDialogBean
 import com.even.common.views.RemindDialogFragment
 import com.even.mvvmdemo.databinding.ActivityMainBinding
 
-class MainActivity : BaseBindActivity<MainViewModel, ActivityMainBinding>(R.layout.activity_main) {
-    override fun getVariable(): Int = BR.mainViewModel
-
+class MainActivity :
+    BaseBindActivity<MainViewModel, ActivityMainBinding>(
+        R.layout.activity_main, BR.mainViewModel
+    ) {
     override fun initView() {
         mViewModel.req()
         mDataBinding.btn.setOnClickListener {

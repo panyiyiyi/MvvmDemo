@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,11 +19,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.even.common.BR
 import com.even.common.R
+import com.even.common.bean.ErrorBean
 import com.even.common.bean.TitleBarBean
 import com.even.common.databinding.CommonTitleBarBinding
 import com.even.common.impl.OnPermissionCallBack
 import com.even.common.impl.OnPermissionCallBacks
 import com.even.common.utils.ActivityManagerUtils
+import com.even.common.utils.ToastUtils
 import com.even.common.vm.BaseViewModel
 import java.lang.reflect.ParameterizedType
 
@@ -77,8 +80,13 @@ abstract class BaseActivity<VM : BaseViewModel>(@LayoutRes private val layoutId:
     private fun observeCallBack() {
         mViewModel.titleBackListener.set(View.OnClickListener { finish() })
         mViewModel.mIsShowLoading.observe(this, Observer {
-
+            //加载框
+            showLoading()
         })
+        mViewModel.mErrorData.observe(this, Observer {
+            showError(it)
+        })
+
     }
 
     fun setTitleBar(titleBarBean: TitleBarBean) {
@@ -201,12 +209,12 @@ abstract class BaseActivity<VM : BaseViewModel>(@LayoutRes private val layoutId:
     //获取数据
     open fun initData() {}
 
-    open fun showLoading(){
+    open fun showLoading() {
 
     }
 
-    open fun showError(){
-
+    open fun showError(it: ErrorBean) {
+        ToastUtils.showShort(it.error ?: "")
     }
 
     open fun useDefaultTitleBar(): Boolean = true

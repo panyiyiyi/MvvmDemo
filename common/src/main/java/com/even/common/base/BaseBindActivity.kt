@@ -17,7 +17,7 @@ abstract class BaseBindActivity<VM : BaseViewModel, T : ViewDataBinding>(
 ) :
     BaseActivity<VM>(layoutId) {
 
-    open lateinit var mDataBinding: T
+    lateinit var mDataBinding: T
     override fun initView(view: ViewGroup) {
         mDataBinding = if (useDefaultTitleBar()) {
             //使用默认标题
