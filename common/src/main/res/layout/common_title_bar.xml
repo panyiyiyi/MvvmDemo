@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@{baseViewModel.titleBar.backResource}">
+        android:background="@{baseViewModel.titleBar.bgResource}">
 
         <ImageView
             android:id="@+id/ivBack"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{baseViewModel.titleBackListener}"
             android:padding="15dp"
-            android:src="@mipmap/common_ic_back"
+            android:src="@{baseViewModel.titleBar.leftImage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,8 @@
             android:gravity="center"
             android:onClick="@{baseViewModel.titleBarListener}"
             android:text="@{baseViewModel.titleBar.rightText}"
-            android:textSize="@dimen/textSizeS"
+            android:textColor="@{baseViewModel.titleBar.rightTextColor}"
+            android:textSize="@{baseViewModel.titleBar.rightTextSize}"
             android:visibility="@{baseViewModel.titleBar.showRightImage?View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +64,8 @@
             android:gravity="center"
             android:onClick="@{baseViewModel.titleBarListener}"
             android:text="@{baseViewModel.titleBar.title}"
-            android:textSize="@dimen/textSizeM"
+            android:textColor="@{baseViewModel.titleBar.titleTextColor}"
+            android:textSize="@{baseViewModel.titleBar.titleTextSize}"
             android:visibility="@{baseViewModel.titleBar.title==null ? View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

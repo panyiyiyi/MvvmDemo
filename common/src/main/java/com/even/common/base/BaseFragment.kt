@@ -18,14 +18,12 @@ import java.lang.reflect.ParameterizedType
 abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
     lateinit var mViewModel: VM
     lateinit var mView: View
-    lateinit var activity: BaseActivity<VM>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity = getActivity() as BaseActivity<VM>
         val clazz =
             (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<VM>
         mViewModel = ViewModelProvider(this).get(clazz)
@@ -51,11 +49,11 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
     //布局ID
     abstract fun getLayoutId(): Int
 
-    //初始化View
-    abstract fun initView()
-
     //绑定参数
     abstract fun getVariable(): Int?
+
+    //初始化View
+    abstract fun initView()
 
     //初始化数据
     open fun initData() {}

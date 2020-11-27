@@ -2,55 +2,40 @@ package com.even.common.bean
 
 import android.graphics.Color
 import com.even.common.R
+import com.even.commonrv.utils.DisplayUtil
 
 /**
  * Created Even by 2020/10/26
  * 默认标题栏数据对象
  */
 data class TitleBarBean(
-    var title: String?,
-    var rightText: String?,
-    var rightImage: Int,
-    var showRightImage: Boolean,
-    var backResource: Int = Color.WHITE
+    var leftImage: Int = R.mipmap.common_ic_back,
+    var title: String? = "",
+    var titleTextSize: Int = DisplayUtil.sp2px(17f).toInt(),
+    var titleTextColor: Int = Color.WHITE,
+    var rightText: String? = "",
+    var rightTextSize: Int = DisplayUtil.sp2px(17f).toInt(),
+    var rightTextColor: Int = Color.WHITE,
+    var rightImage: Int = R.mipmap.common_ic_back,
+    var showRightImage: Boolean = false,
+    var bgResource: Int = Color.WHITE
 ) {
-    constructor() : this(
-        null,
-        null,
-        R.mipmap.ic_launcher,
-        false,
-        Color.WHITE
-    )
+    constructor(title: String) {
+        this.title = title
+    }
 
-    constructor(title: String) : this(
-        title,
-        null,
-        R.mipmap.ic_launcher,
-        false,
-        Color.WHITE
-    )
+    constructor(title: String, rightText: String) {
+        this.title = title
+        this.rightText = rightText
+    }
 
-    constructor(title: String, rightText: String) : this(
-        title,
-        rightText,
-        R.mipmap.ic_launcher,
-        false,
-        Color.WHITE
-    )
+    constructor(title: String, rightImage: Int) {
+        this.title = title
+        this.rightImage = rightImage
+    }
 
-    constructor(title: String, rightImage: Int) : this(
-        title,
-        null,
-        rightImage,
-        true,
-        Color.WHITE
-    )
-
-    constructor(title: String, rightImage: Int?, backResource: Int) : this(
-        title,
-        null,
-        R.mipmap.ic_launcher,
-        false,
-        backResource
-    )
+    constructor(title: String, rightText: String, bgResource: Int) {
+        this.title = title
+        this.rightText = rightText
+    }
 }
