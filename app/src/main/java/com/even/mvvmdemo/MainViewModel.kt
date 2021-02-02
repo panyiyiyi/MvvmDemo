@@ -15,6 +15,7 @@ class MainViewModel : BaseViewModel() {
 
     fun req() {
 
+
         viewModelScope.launch {
             val job1 = requestService(
                 { mRetrofitUtil.create(AppApiService::class.java).getArticleList(10) },

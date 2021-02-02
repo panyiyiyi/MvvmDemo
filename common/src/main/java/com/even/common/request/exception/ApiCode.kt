@@ -5,7 +5,10 @@ package com.even.common.request.exception
  *  Email: emailtopan@163.com
  * 自定义异常错误Code,与服务器的错误码无关联，如果要判断服务器的错误码，需在做处理
  */
-object ErrorCode {
+object ApiCode {
+    //返回成功
+    const val SUCCESS = 0
+
     /**
      * 未知错误
      */

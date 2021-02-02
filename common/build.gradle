@@ -26,6 +26,9 @@ android {
     dataBinding {
         enabled = true
     }
+    kotlinOptions {
+        freeCompilerArgs += ['-Xopt-in=kotlin.contracts.ExperimentalContracts']
+    }
 }
 
 dependencies {

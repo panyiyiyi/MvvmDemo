@@ -11,10 +11,7 @@ import com.even.common.bean.TitleBarBean
 import com.even.common.request.RetrofitUtil
 import com.even.common.request.exception.ApiException
 import com.even.common.utils.LogUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 open class BaseViewModel : ViewModel() {
     val mIsShowLoading = MutableLiveData<Boolean>()//是否显示加载框
@@ -55,6 +52,14 @@ open class BaseViewModel : ViewModel() {
                 mIsShowLoading.postValue(false)
             }
         }
+    }
+
+    fun launchOnUI(block: suspend CoroutineScope.() -> Unit): Job {
+        return viewModelScope.launch { block() }
+    }
+
+    fun launchOnIO(block: suspend CoroutineScope.() -> Unit): Job {
+        return viewModelScope.launch(Dispatchers.IO) { block() }
     }
 
 }

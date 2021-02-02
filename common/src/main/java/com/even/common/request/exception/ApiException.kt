@@ -33,7 +33,7 @@ class ApiException : Exception {
             when (exception) {
                 is SocketTimeoutException -> {
                     //请求超时
-                    api = ApiException(exception, ErrorCode.TIMEOUT_ERROR)
+                    api = ApiException(exception, ApiCode.TIMEOUT_ERROR)
                     api.message =
                         ApplicationUtils.getInstance().applicationContext.getString(
                             R.string.common_connect_error
@@ -41,7 +41,7 @@ class ApiException : Exception {
                 }
                 is ConnectException -> {
                     //连接异常
-                    api = ApiException(exception, ErrorCode.TIMEOUT_ERROR)
+                    api = ApiException(exception, ApiCode.TIMEOUT_ERROR)
                     api.message =
                         ApplicationUtils.getInstance().applicationContext.getString(
                             R.string.common_connect_error
@@ -49,7 +49,7 @@ class ApiException : Exception {
                 }
                 is NullPointerException -> {
                     //空指针
-                    api = ApiException(exception, ErrorCode.NULL_POINTER_ERROR)
+                    api = ApiException(exception, ApiCode.NULL_POINTER_ERROR)
                     api.message =
                         ApplicationUtils.getInstance().applicationContext.getString(
                             R.string.common_null_pointer_error
@@ -58,7 +58,7 @@ class ApiException : Exception {
 
                 is SSLHandshakeException -> {
                     //证书校验失败
-                    api = ApiException(exception, ErrorCode.SSL_ERROR)
+                    api = ApiException(exception, ApiCode.SSL_ERROR)
                     api.message =
                         ApplicationUtils.getInstance().applicationContext.getString(
                             R.string.common_ssl_error
@@ -66,19 +66,19 @@ class ApiException : Exception {
                 }
                 is JSONException, is NotSerializableException, is ParseException, is IllegalStateException -> {
                     //解析错误
-                    api = ApiException(exception, ErrorCode.PARSE_ERROR)
+                    api = ApiException(exception, ApiCode.PARSE_ERROR)
                     api.message =
                         ApplicationUtils.getInstance().applicationContext.getString(R.string.common_parse_error)
                 }
                 is UnknownHostException -> {
                     //服务器异常
-                    api = ApiException(exception, ErrorCode.TIMEOUT_ERROR)
+                    api = ApiException(exception, ApiCode.TIMEOUT_ERROR)
                     api.message =
                         ApplicationUtils.getInstance().applicationContext.getString(R.string.common_unknown_host_error)
                 }
                 else -> {
                     //未知异常
-                    api = ApiException(exception, ErrorCode.UNKNOWN)
+                    api = ApiException(exception, ApiCode.UNKNOWN)
                     api.message =
                         ApplicationUtils.getInstance().applicationContext.getString(R.string.common_unknown_error)
                 }
